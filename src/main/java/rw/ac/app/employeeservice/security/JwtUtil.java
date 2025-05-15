@@ -4,6 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import rw.ac.app.employeeservice.model.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +39,10 @@ public class JwtUtil {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public String extractRole(String token){
+        return extractAllClaims(token).get("role", String.class);
+    }
+
     public Date extractDuration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -55,9 +61,10 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        claims.put("role", user.getRole()); //adds role to JWT payload
+        return createToken(claims, user.getUsername());
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
