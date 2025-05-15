@@ -59,6 +59,9 @@ public class AuthController {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists");
         }
+        if (request.getRole() == null) {
+            return ResponseEntity.badRequest().body("Enter a valid role");
+        }
         String username = request.getUsername();
         String role = request.getRole();
         String password = passwordEncoder.encode(request.getPassword());

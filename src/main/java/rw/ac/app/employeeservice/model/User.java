@@ -16,6 +16,7 @@ public class User {
 
     private String password;
 
+    @Column(nullable = false)
     private String role;
 
     public Long getId() {
